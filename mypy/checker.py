@@ -217,9 +217,15 @@ class TypeChecker(NodeVisitor[Type]):
 
     def accept(self, node: Node, type_context: Type = None) -> Type:
         """Type check a node in the given type context."""
+    #    if type_context == builtins.bytes:
+    #        print('checker.py: accept(node, type_context)')
+    #        print('checker.py: accept(%s, %s)' % (node, type_context,))
         self.type_context.append(type_context)
         try:
             typ = node.accept(self)
+    #        if type_context == builtins.bytes:
+    #            print('checker.py: typ = node.accept(self)')
+    #            print('checker.py: %s = node.accept(self)' % (typ,))
         except Exception as err:
             report_internal_error(err, self.errors.file, node.line, self.errors)
         self.type_context.pop()
@@ -1473,6 +1479,8 @@ class TypeChecker(NodeVisitor[Type]):
             if s.expr:
                 # Return with a value.
                 typ = self.accept(s.expr, return_type)
+                print('checker.py: typ = self.accept(s.expr, return_type)')
+                print('checker.py: %s = self.accept(%s, %s)' % (typ, s.expr, return_type,))
                 # Returning a value of type Any is always fine.
                 if isinstance(typ, AnyType):
                     return None
@@ -1484,6 +1492,7 @@ class TypeChecker(NodeVisitor[Type]):
                         return None
                     self.fail(messages.NO_RETURN_VALUE_EXPECTED, s)
                 else:
+                    print('mypy/checker.py: self.check_subtype(subtype=%s, supertype=%s)' % (typ, return_type,))
                     self.check_subtype(
                         subtype_label='got',
                         subtype=typ,
