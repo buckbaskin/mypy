@@ -140,6 +140,7 @@ class TypeChecker(NodeVisitor[Type]):
         self.module_type_map = {}
         self.binder = ConditionalTypeBinder()
         self.expr_checker = mypy.checkexpr.ExpressionChecker(self, self.msg)
+        print('checker.py: TypeChecker.__init__ expr_checker = %s' % (self.expr_checker,))
         self.return_types = []
         self.type_context = []
         self.dynamic_funcs = []
@@ -2041,6 +2042,7 @@ class TypeChecker(NodeVisitor[Type]):
         return self.expr_checker.visit_ellipsis(e)
 
     def visit_op_expr(self, e: OpExpr) -> Type:
+        print('checker.py: visit_op_expr')
         return self.expr_checker.visit_op_expr(e)
 
     def visit_comparison_expr(self, e: ComparisonExpr) -> Type:

@@ -1350,6 +1350,9 @@ class OpExpr(Expression):
         self.literal_hash = ('Binary', op, left.literal_hash, right.literal_hash)
 
     def accept(self, visitor: NodeVisitor[T]) -> T:
+        print('nodes.py: OpExpr.accept(visitor: %s)' % (visitor,))
+        result = visitor.visit_op_expr(self)
+        print('nodes.py: OpExpr.accept(visitor) -> %s' % (result,))
         return visitor.visit_op_expr(self)
 
 

@@ -963,6 +963,9 @@ class ExpressionChecker:
             # Expressions of form [...] * e get special type inference.
             return self.check_list_multiply(e)
         if e.op == '%' and isinstance(e.left, (StrExpr, BytesExpr)):
+            if isinstance(e.left, BytesExpr):
+                print('checker.py: The problem. It checks everything as a StrExpr')
+                return self.strfrm_checker.check_str_interpolation(cast(StrExpr, e.left), e.right)
             return self.strfrm_checker.check_str_interpolation(cast(StrExpr, e.left), e.right)
         left_type = self.accept(e.left)
 
