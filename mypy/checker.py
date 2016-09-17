@@ -217,15 +217,15 @@ class TypeChecker(NodeVisitor[Type]):
 
     def accept(self, node: Node, type_context: Type = None) -> Type:
         """Type check a node in the given type context."""
-    #    if type_context == builtins.bytes:
-    #        print('checker.py: accept(node, type_context)')
-    #        print('checker.py: accept(%s, %s)' % (node, type_context,))
+        import builtins
+        # if it's expecting a bytes and got an OpExpr
+        if str(type_context) == 'builtins.bytes' and isinstance(node, mypy.nodes.OpExpr):
+            print('checker.py: accept(%s, %s)' % (node, type_context,))
         self.type_context.append(type_context)
         try:
             typ = node.accept(self)
-    #        if type_context == builtins.bytes:
-    #            print('checker.py: typ = node.accept(self)')
-    #            print('checker.py: %s = node.accept(self)' % (typ,))
+            if str(type_context) == 'builtins.bytes' and isinstance(node, mypy.nodes.OpExpr):
+                print('checker.py: > typ %s' % (typ,))
         except Exception as err:
             report_internal_error(err, self.errors.file, node.line, self.errors)
         self.type_context.pop()
